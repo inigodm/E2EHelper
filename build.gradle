@@ -1,0 +1,35 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    runtimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation "org.assertj:assertj-core:${assertJVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
+}
+
+
+test {
+    useJUnitPlatform()
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nTest result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
+}
