@@ -14,9 +14,15 @@ class HttpGetPetitionAssertionTest {
     @Test
     fun `should throw assert error if error is not ok`() {
         assertThrows<AssertionFailedError> {
-            Petition.sendAGetTo("http://localhost/getoquehase")
+            Petition.sendAGetTo("http://localhost/status/400")
                 .assertThatResponseIsOk()
         }
+    }
+
+    @Test
+    fun `should assert that a 400 is returned`() {
+        Petition.sendAGetTo("http://localhost/status/400")
+            .assertThatResponseCodeIs(400)
     }
 
     @Test
@@ -30,5 +36,26 @@ class HttpGetPetitionAssertionTest {
     fun `should respond with given string in the body`() {
         Petition.sendAGetTo("http://localhost/get")
             .assertThatBodyContains("url")
+    }
+
+    @Test
+    fun `should send a put petition with body and receive a 200`() {
+        Petition.sendAPutTo("http://localhost/put", "innerbody")
+            .assertThatResponseIsOk()
+            .assertThatBodyContains("innerbody")
+    }
+
+    @Test
+    fun `should send a post petition with body and receive a 200`() {
+        Petition.sendAPostTo("http://localhost/post", "innerbody")
+            .assertThatResponseIsOk()
+            .assertThatBodyContains("innerbody")
+    }
+
+    @Test
+    fun `should send a delete petition with body and receive a 200`() {
+        Petition.sendADeleteTo("http://localhost/delete", "innerbody")
+            .assertThatResponseIsOk()
+            .assertThatBodyContains("innerbody")
     }
 }

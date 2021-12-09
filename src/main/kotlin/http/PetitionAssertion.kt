@@ -6,7 +6,8 @@ import okhttp3.Response
 
 interface Petition<T> {
     companion object {
-        @kotlin.jvm.JvmStatic
+        @JvmStatic
+        @JvmOverloads
         fun sendAGetTo(url: String, headers: Map<String, String> = mapOf()): RestResponse {
             val client = OkHttpClient()
             val res = client.newCall(
@@ -16,7 +17,9 @@ interface Petition<T> {
             return RestResponse.from(res)
         }
 
-        fun sendAPutTo(url: String, headers: Map<String, String>, body: String): RestResponse {
+        @JvmStatic
+        @JvmOverloads
+        fun sendAPutTo(url: String, body: String, headers: Map<String, String> = mapOf()): RestResponse {
             val client = OkHttpClient()
             val res = client.newCall(
                 createAPetition(url, headers)
@@ -25,6 +28,27 @@ interface Petition<T> {
             return RestResponse.from(res)
         }
 
+        @JvmStatic
+        @JvmOverloads
+        fun sendAPostTo(url: String, body: String, headers: Map<String, String> = mapOf()): RestResponse {
+            val client = OkHttpClient()
+            val res = client.newCall(
+                createAPetition(url, headers)
+                    .post(body.toRequestBody())
+                    .build()).execute()
+            return RestResponse.from(res)
+        }
+
+        @JvmStatic
+        @JvmOverloads
+        fun sendADeleteTo(url: String, body: String = "", headers: Map<String, String> = mapOf()): RestResponse {
+            val client = OkHttpClient()
+            val res = client.newCall(
+                createAPetition(url, headers)
+                    .delete(body.toRequestBody())
+                    .build()).execute()
+            return RestResponse.from(res)
+        }
 
         fun createAPetition(url: String, headers: Map<String, String>): Request.Builder {
             val request = Request.Builder()

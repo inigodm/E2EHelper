@@ -12,6 +12,11 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
         return this
     }
 
+    fun assertThatResponseCodeIs(code: Int) : RestResponse {
+        assertThat(returned.code).isEqualTo(code)
+        return this
+    }
+
     fun assertThatBodyEqualsTo(expectedResponse : Map<String, Any>) : RestResponse {
         val body = returned.body
         val responseMap : Map<String, Any> =
@@ -46,9 +51,4 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
             return RestResponse(t)
         }
     }
-
-    inline fun <reified T> fromJson(json: String): T {
-        return Gson().fromJson(json, T::class.java)
-    }
-
 }
