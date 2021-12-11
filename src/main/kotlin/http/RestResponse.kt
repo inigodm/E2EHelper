@@ -45,6 +45,14 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
         return this
     }
 
+    fun assertThatHasHeaderThatContains(header: String, contains: String) {
+        assertThat(returned.headers[header]).contains(contains)
+    }
+
+    fun headers(name: String) : String? {
+        return returned.header(name)
+    }
+
     companion object {
         @kotlin.jvm.JvmStatic
         fun  from(t: Response): RestResponse {
