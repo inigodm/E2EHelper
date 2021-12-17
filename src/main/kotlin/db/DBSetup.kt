@@ -13,8 +13,8 @@ class DBSetup(val dbConnectionString: String) {
         return this
     }
 
-    fun `when`(sql: String): DBResult {
-        return DBResult(executeQuery(sql))
+    fun `when`(sql: String): DBResponse {
+        return DBResponse(executeQuery(sql))
     }
 
     fun connect() : Connection {

@@ -3,14 +3,14 @@ package db
 import org.assertj.core.api.Assertions.assertThat
 import org.opentest4j.AssertionFailedError
 
-class DBResult (val inner: List<Map<String, String>>) {
+class DBResponse (val inner: List<Map<String, String>>) {
 
-    fun assertThatNumberOfResponses(number: Int): DBResult {
+    fun assertThatNumberOfResponses(number: Int): DBResponse {
         assertThat(inner.size).isEqualTo(number)
         return this
     }
 
-    fun assertThatExistAEntryWithFields(toCheck: Map<String, String>) : DBResult{
+    fun assertThatExistAEntryWithFields(toCheck: Map<String, String>) : DBResponse{
         if (inner.filter { innerMap ->
             toCheck.keys.filter { key ->
                 toCheck[key.uppercase()].equals(innerMap[key.uppercase()]) }

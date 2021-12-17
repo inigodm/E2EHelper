@@ -1,11 +1,10 @@
 package http
 
-import db.DBResult
+import db.DBResponse
 import db.DBSetup
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 object DBAssertion {
     val url = "jdbc:sqlite:sample.db"
@@ -49,7 +48,7 @@ object DBAssertion {
 
     @Test
     fun `should find a response inside the resultset`() {
-        val sut = DBResult(listOf(mapOf("a" to "1", "b" to "2"), mapOf("a" to "3", "b" to "4")))
+        val sut = DBResponse(listOf(mapOf("a" to "1", "b" to "2"), mapOf("a" to "3", "b" to "4")))
 
         sut.assertThatExistAEntryWithFields(mapOf("a" to "3"))
     }
