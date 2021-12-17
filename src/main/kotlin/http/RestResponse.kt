@@ -25,12 +25,25 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
         return this
     }
 
-    fun assertThatBodyContains(expectedResponse : Map<String, Any>) : RestResponse {
+    fun assertThatBodyContains(expectedResponse : Map<String, Any?>) : RestResponse {
         val body = returned.body
         val responseMap : Map<String, Any> =
             gson.fromJson(body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
         assertThat(responseMap).containsAllEntriesOf(expectedResponse)
         return this
+    }
+
+
+    fun assertThatBodyContainsKey(vararg keys : String) : RestResponse {
+        val body = returned.body
+        val responseMap : Map<String, Any> =
+            gson.fromJson(body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
+        assertThat(responseMap).containsKeys(*keys)
+        return this
+    }
+
+    fun body() : Map<String, Any?> {
+        return gson.fromJson(returned.body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
     }
 
     fun assertThatBodyContains(expectedResponse : String) : RestResponse {
@@ -52,6 +65,8 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
     fun headers(name: String) : String? {
         return returned.header(name)
     }
+
+    inline fun <reified T> parseBody() = Gson().fromJson(returned.body.toString(), T::class.java)
 
     companion object {
         @kotlin.jvm.JvmStatic

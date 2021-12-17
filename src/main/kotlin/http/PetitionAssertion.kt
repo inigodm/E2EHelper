@@ -1,5 +1,6 @@
 package http
 
+import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
@@ -22,14 +23,19 @@ class Petition(val url: String) {
         return this
     }
 
-    fun sendAGet(): RestResponse {
+    fun sendAGet(queryParams : Map<String, String> = mapOf()): RestResponse {
         val client = OkHttpClient()
         val res = client.newCall(
-            createAPetition(url, innerHeaders)
+            createAPetition("${url}?${mapToQuery(queryParams)}", innerHeaders)
                 .get()
                 .build()).execute()
         return RestResponse.from(res)
     }
+
+    fun mapToQuery(queryParams : Map<String, String>) = queryParams.keys.map { "${it.utf8()}=${queryParams[it]!!.utf8()}"} .joinToString("&")
+
+    fun String.utf8(): String = java.net.URLEncoder.encode(this, "UTF-8")
+
 
     fun sendAPut(body: String): RestResponse {
         val client = OkHttpClient()
@@ -38,6 +44,10 @@ class Petition(val url: String) {
                 .put(body.toRequestBody())
                 .build()).execute()
         return RestResponse.from(res)
+    }
+
+    fun sendAPut(body : Map<String, Any?>) : RestResponse{
+        return sendAPut(Gson().toJson(body))
     }
 
     fun sendAPost(body: String): RestResponse {
@@ -70,5 +80,4 @@ class Petition(val url: String) {
             return request.url(url)
         }
     }
-
 }
