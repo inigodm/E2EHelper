@@ -2,4 +2,4 @@
 gradlew*
 /.gradle
 /.idea
-/gradle
+/gradle/wrapper/gradle-wrapper.jar
