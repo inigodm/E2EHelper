@@ -1,11 +1,10 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.0'
     id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+    //id 'maven-publish'
 }
 
 group = "bik"
 version = "master-SNAPSHOT"
-//archivesBaseName 'httpunit2'
 
 allprojects {
     repositories {
@@ -31,11 +30,11 @@ test {
     useJUnitPlatform()
     afterSuite { desc, result ->
         if (!desc.parent) {
-            println "\nTest result: ${result.resultType}"
-            println "Test summary: ${result.testCount} tests, " +
+            System.out.println("\nTest result: ${result.resultType}")
+            System.out.println("Test summary: ${result.testCount} tests, " +
                     "${result.successfulTestCount} succeeded, " +
                     "${result.failedTestCount} failed, " +
-                    "${result.skippedTestCount} skipped"
+                    "${result.skippedTestCount} skipped")
         }
     }
 }
