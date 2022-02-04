@@ -1,10 +1,10 @@
-Simple E2E library to improve the semantics of E2E testing for the project that Amaia will do to  create our Thermostat
+Simple E2E test library to improve the semantics of E2E testing for the project that Amaia will do to create our Thermostat
+
+It, basically, manages DB and HTTP connections in order to let the test more semantics
 
 # Installing 
 
-Is hosted in the maven repository of [jitpack](https://jitpack.io) current major version is:
-
-[![](https://jitpack.io/v/inigodm/E2EHelper.svg)](https://jitpack.io/#inigodm/E2EHelper)
+Is hosted in the maven repository of [jitpack](https://jitpack.io)
 
 But you can use master-SNAPSHOT to get the latest code.
 
@@ -19,7 +19,11 @@ allprojects {
     }
 ```
 
-And add the dependencie:
+And add the dependency:
+
+Currently major version, when this document was done, was 0.0.4, nowadays is:
+
+[![](https://jitpack.io/v/inigodm/E2EHelper.svg)](https://jitpack.io/#inigodm/E2EHelper)
 
 ```
 dependencies {
@@ -27,11 +31,19 @@ dependencies {
 }
 ```
 
+or use the master branch to get the latest code
+
+```
+dependencies {
+    testImplementation 'com.github.inigodm:E2EHelper:master-SNAPSHOT'
+}
+```
+
 # Using it
 
-You can use it in your tests sourceset simpli using it on your tests source directory or make another specific sourceset to  manage e2e tests which, being recomended, is more tricky, so:
+You can use it simply as part of your unit tests or make another specific sourceset to  manage e2e tests which, being recomended, is more tricky and require more gradle/maven configuration.
 
-To start using it, simply add to your dependencies and take a look to existing tests, you could find there some exameples of use
+To get examples of use a look to existing [tests](https://github.com/inigodm/E2EHelper/tree/master/src/test/kotlin), you could find there some examples of use
 
 #To build from source
 

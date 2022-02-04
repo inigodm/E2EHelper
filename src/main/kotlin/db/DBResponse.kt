@@ -5,7 +5,7 @@ import org.opentest4j.AssertionFailedError
 
 class DBResponse (val inner: List<Map<String, String>>) {
 
-    fun assertThatNumberOfCoincidences(number: Int): DBResponse {
+    fun assertThatNumberOfResults(number: Int): DBResponse {
         assertThat(inner.size).isEqualTo(number)
         return this
     }

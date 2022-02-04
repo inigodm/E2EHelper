@@ -34,22 +34,23 @@ object DBAssertion {
     fun `should retrieve the appropriate number of coincidences`() {
         DBSetup("jdbc:sqlite:sample.db")
             .`when`("select * from users")
-            .assertThatNumberOfCoincidences(2)
+            .assertThatNumberOfResults(2)
     }
 
     @Test
     fun `should throw an exception when number of responses unexpected`() {
         Assertions.assertThatThrownBy {  DBSetup("jdbc:sqlite:sample.db")
             .`when`("select * from users")
-            .assertThatNumberOfCoincidences(42) }
+            .assertThatNumberOfResults(42) }
             .isInstanceOf(org.opentest4j.AssertionFailedError::class.java)
     }
 
     @Test
     fun `should check responses`() {
         DBSetup("jdbc:sqlite:sample.db")
-            .`when`("select * from users")
+            .`when`("select * from users where user='user'")
             .assertThatExistAEntryWithFields(mutableMapOf("USER" to "user", "PASS" to "pass"))
+            .assertThatNumberOfResults(1)
     }
 
     @Test
@@ -64,6 +65,6 @@ object DBAssertion {
         DBSetup("jdbc:sqlite:sample.db")
             .givenEmptyTable("users")
             .`when`("select * from users")
-            .assertThatNumberOfCoincidences(0)
+            .assertThatNumberOfResults(0)
     }
 }
