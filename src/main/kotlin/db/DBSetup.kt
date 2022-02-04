@@ -13,6 +13,11 @@ class DBSetup(val dbConnectionString: String) {
         return this
     }
 
+    fun givenEmptyTable(tableName: String) : DBSetup{
+        executeSql("Delete from ${tableName}")
+        return this
+    }
+
     fun `when`(sql: String): DBResponse {
         return DBResponse(executeQuery(sql))
     }
