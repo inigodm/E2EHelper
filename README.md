@@ -1,6 +1,6 @@
 Simple E2E library to improve the semantics of E2E testing for the project that Amaia will do to  create our Thermostat
 
-#Installing 
+# Installing 
 
 Is hosted in the maven repository of [jitpack](https://jitpack.io) current major version is:
 
