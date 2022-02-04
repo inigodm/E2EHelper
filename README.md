@@ -1,8 +1,12 @@
 Simple E2E library to improve the semantics of E2E testing for the project that Amaia will do to  create our Thermostat
 
-#Installing
+#Installing 
 
-Is hosted in the maven repository of [jitpack](https://jitpack.io)
+Is hosted in the maven repository of [jitpack](https://jitpack.io) current major version is:
+
+[![](https://jitpack.io/v/inigodm/E2EHelper.svg)](https://jitpack.io/#inigodm/E2EHelper)
+
+But you can use master-SNAPSHOT to get the latest code.
 
 So, to use it, in gradle, you have to add the repository:
 
