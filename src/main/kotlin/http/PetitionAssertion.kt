@@ -3,7 +3,6 @@ package http
 import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
 
 class Petition(val url: String) {
     val innerHeaders = mutableMapOf<String, String>()
