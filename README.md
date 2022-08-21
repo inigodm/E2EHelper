@@ -21,9 +21,9 @@ allprojects {
 
 And add the dependency:
 
-Currently major version, when this document was done, was 0.0.4, nowadays is:
+Currently, major version. When this document was done, was 0.0.4, nowadays is:
 
-[![](https://jitpack.io/v/inigodm/E2EHelper.svg)](https://jitpack.io/#inigodm/E2EHelper)
+[![jitPack badge](https://jitpack.io/v/inigodm/E2EHelper.svg "jitPack badge")](https://jitpack.io/#inigodm/E2EHelper)
 
 ```
 dependencies {
@@ -41,7 +41,7 @@ dependencies {
 
 # Using it
 
-You can use it simply as part of your unit tests or make another specific sourceset to  manage e2e tests which, being recomended, is more tricky and require more gradle/maven configuration.
+You can use it simply as part of your unit tests or make another specific source set to  manage e2e tests which, being recommended, is more tricky and require more gradle/maven configuration.
 
 To get examples of use a look to existing [tests](https://github.com/inigodm/E2EHelper/tree/master/src/test/kotlin), you could find there some examples of use
 
@@ -60,7 +60,7 @@ sudo mkdir /sys/fs/cgroup/systemd
 sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
 ```
 
-After of this run de docker:
+After of this run the docker:
 
 ```
 docker rm -f $(docker ps -qa)

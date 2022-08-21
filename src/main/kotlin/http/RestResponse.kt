@@ -17,33 +17,25 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
         return this
     }
 
-    fun assertThatBodyEqualsTo(expectedResponse : Map<String, Any>) : RestResponse {
-        val body = returned.body
-        val responseMap : Map<String, Any> =
-            gson.fromJson(body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
-        assertThat(responseMap).containsExactlyInAnyOrderEntriesOf(expectedResponse)
+    fun assertThatBodyContainsExactlyInAnyOrder(expectedResponse : Map<String, Any>) : RestResponse {
+        assertThat(Gson().fromJson(extractBodyAsMap()["data"].toString(), object : TypeToken<Map<String?, Any?>?>() {}.type)
+         as Map<String, Any>)
+            .containsExactlyInAnyOrderEntriesOf(expectedResponse)
         return this
     }
 
     fun assertThatBodyContains(expectedResponse : Map<String, Any?>) : RestResponse {
-        val body = returned.body
-        val responseMap : Map<String, Any> =
-            gson.fromJson(body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
-        assertThat(responseMap).containsAllEntriesOf(expectedResponse)
+        assertThat(extractBodyAsMap()).containsAllEntriesOf(expectedResponse)
         return this
     }
 
-
     fun assertThatBodyContainsKey(vararg keys : String) : RestResponse {
-        val body = returned.body
-        val responseMap : Map<String, Any> =
-            gson.fromJson(body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
-        assertThat(responseMap).containsKeys(*keys)
+        assertThat(extractBodyAsMap()).containsKeys(*keys)
         return this
     }
 
     fun body() : Map<String, Any?> {
-        return gson.fromJson(returned.body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.getType())
+        return gson.fromJson(returned.body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.type)
     }
 
     fun assertThatBodyContains(expectedResponse : String) : RestResponse {
@@ -62,8 +54,18 @@ class RestResponse private constructor(var returned: Response, var gson : Gson =
         assertThat(returned.headers[header]).contains(contains)
     }
 
+    fun assertThatHasHeader(header: String, value: String) {
+        assertThat(returned.headers[header]).isEqualTo(value)
+    }
+
+
     fun headers(name: String) : String? {
         return returned.header(name)
+    }
+
+    private fun extractBodyAsMap(): Map<String, Any> {
+        val body = returned.body
+        return gson.fromJson(body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.type)
     }
 
     inline fun <reified T> parseBody() = Gson().fromJson(returned.body.toString(), T::class.java)

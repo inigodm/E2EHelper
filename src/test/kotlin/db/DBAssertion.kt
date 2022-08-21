@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.opentest4j.AssertionFailedError
 
 object DBAssertion {
     val url = "jdbc:sqlite:sample.db"
@@ -49,15 +50,24 @@ object DBAssertion {
     fun `should check responses`() {
         DBSetup("jdbc:sqlite:sample.db")
             .`when`("select * from users where user='user'")
-            .assertThatExistAEntryWithFields(mutableMapOf("USER" to "user", "PASS" to "pass"))
+            .assertThatExistAnEntryWithFields(mutableMapOf("USER" to "user", "PASS" to "pass"))
             .assertThatNumberOfResults(1)
+    }
+
+    @Test
+    fun `should throw an exception if no  entry exists with given values`() {
+        Assertions.assertThatThrownBy {  DBSetup("jdbc:sqlite:sample.db")
+            .`when`("select * from users where user='user'")
+            .assertThatExistAnEntryWithFields(mutableMapOf("USER" to "user", "PASS" to "nopass")) }
+            .isInstanceOf(AssertionFailedError::class.java)
+            .hasMessage("Cannot find a row with given values")
     }
 
     @Test
     fun `should find a response inside the resultset`() {
         val sut = DBResponse(listOf(mapOf("a" to "1", "b" to "2"), mapOf("a" to "3", "b" to "4")))
 
-        sut.assertThatExistAEntryWithFields(mapOf("a" to "3"))
+        sut.assertThatExistAnEntryWithFields(mapOf("a" to "3"))
     }
 
     @Test

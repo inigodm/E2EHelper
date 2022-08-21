@@ -47,9 +47,9 @@ class HttpGetPetitionAssertionTest {
 
     @Test
     fun `should send a post petition with body and receive a 200`() {
-        Petition.to("http://localhost/post").sendAPost("innerbody")
+        Petition.to("http://localhost/post").sendAPost(mapOf("innerbody" to "value"))
             .assertThatResponseIsOk()
-            .assertThatBodyContains("innerbody")
+            .assertThatBodyContainsExactlyInAnyOrder(mapOf("innerbody" to "value"))
     }
 
     @Test
