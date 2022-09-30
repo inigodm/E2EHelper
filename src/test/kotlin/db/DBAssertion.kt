@@ -18,7 +18,8 @@ object DBAssertion {
             .given("""Create table users 
                  (USER           TEXT    NOT NULL, 
                   PASS           TEXT     NOT NULL,
-                  SALT			TEXT  	   NOT NULL)""")
+                  SALT			TEXT  	   NOT NULL,
+                  ID INTEGER)""")
     }
 
     @BeforeEach
@@ -26,8 +27,8 @@ object DBAssertion {
         DBSetup("jdbc:sqlite:sample.db")
             .givenEmptyTable("users")
             .given("""
-                insert into users values ('user', 'pass', 'salt');
-                insert into users values ('user2', 'pass2', 'salt2')
+                insert into users values ('user', 'pass', 'salt', 1);
+                insert into users values ('user2', 'pass2', 'salt2', 2)
             """)
     }
 
@@ -65,9 +66,9 @@ object DBAssertion {
 
     @Test
     fun `should find a response inside the resultset`() {
-        val sut = DBResponse(listOf(mapOf("a" to "1", "b" to "2"), mapOf("a" to "3", "b" to "4")))
+        val sut = DBResponse(listOf(mapOf("A" to 11, "B" to 2), mapOf("A" to 3, "B" to 4)))
 
-        sut.assertThatExistAnEntryWithFields(mapOf("a" to "3"))
+        sut.assertThatExistAnEntryWithFields(mapOf("a" to 3))
     }
 
     @Test

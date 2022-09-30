@@ -14,7 +14,7 @@ class DBClientWrapper(private val dbConnectionString: String) {
     }
 
     @Throws(SQLException::class)
-    fun executeQuery(sql: String) : List<Map<String, String>> {
+    fun executeQuery(sql: String) : List<Map<String, Any>> {
         return connect().use { db ->
             db.createStatement().use { statement ->
                 statement.executeQuery(sql).use { rs -> rsToList(rs) }
@@ -27,14 +27,14 @@ class DBClientWrapper(private val dbConnectionString: String) {
     }
 
     @Throws(SQLException::class)
-    private fun rsToList(rs: ResultSet): List<Map<String, String>> {
+    private fun rsToList(rs: ResultSet): List<Map<String, Any>> {
         val md = rs.metaData
         val columns = md.columnCount
-        val results: MutableList<Map<String, String>> = ArrayList()
+        val results: MutableList<Map<String, Any>> = ArrayList()
         while (rs.next()) {
-            val row: MutableMap<String, String> = HashMap()
+            val row: MutableMap<String, Any> = HashMap()
             for (i in 1..columns) {
-                row[md.getColumnLabel(i).uppercase(Locale.getDefault())] = rs.getObject(i) as String
+                row[md.getColumnLabel(i).uppercase(Locale.getDefault())] = rs.getObject(i) as Any
             }
             results.add(row)
         }
