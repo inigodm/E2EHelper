@@ -2,6 +2,8 @@ package http.clientWrapper
 
 import com.google.gson.Gson
 import http.RestResponse
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -28,11 +30,21 @@ class HttpClientWrapper(private val url: String) {
     }
 
     fun put(body : Map<String, Any?>) : RestResponse{
-        return put(Gson().toJson(body))
+        val client = OkHttpClient()
+        val res = client.newCall(
+            createAPetition(url, innerHeaders)
+                .post(Gson().toJson(body)
+                    .toRequestBody("application/json".toMediaType())).build()).execute()
+        return RestResponse.from(res)
     }
 
     fun post(body : Map<String, String?>): RestResponse {
-        return post(Gson().toJson(body))
+        val client = OkHttpClient()
+        val res = client.newCall(
+            createAPetition(url, innerHeaders)
+                .post(Gson().toJson(body)
+                    .toRequestBody("application/json".toMediaType())).build()).execute()
+        return RestResponse.from(res)
     }
 
     fun post(body: String): RestResponse {
