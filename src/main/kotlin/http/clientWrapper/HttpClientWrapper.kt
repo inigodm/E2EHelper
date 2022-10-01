@@ -1,8 +1,7 @@
 package http.clientWrapper
 
 import com.google.gson.Gson
-import http.RestResponse
-import okhttp3.MediaType
+import http.E2EResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -11,58 +10,58 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class HttpClientWrapper(private val url: String) {
     private val innerHeaders = mutableMapOf<String, String>()
 
-    fun get(queryParams : Map<String, String> = mapOf()): RestResponse {
+    fun get(queryParams : Map<String, String> = mapOf()): E2EResponse {
         val client = OkHttpClient()
         val res = client.newCall(
             createAPetition("${url}?${mapToQuery(queryParams)}", innerHeaders)
                 .get()
                 .build()).execute()
-        return RestResponse.from(res)
+        return E2EResponse.from(res)
     }
 
-    fun put(body: String): RestResponse {
+    fun put(body: String): E2EResponse {
         val client = OkHttpClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .put(body.toRequestBody())
                 .build()).execute()
-        return RestResponse.from(res)
+        return E2EResponse.from(res)
     }
 
-    fun put(body : Map<String, Any?>) : RestResponse{
+    fun put(body : Map<String, Any?>) : E2EResponse{
         val client = OkHttpClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .post(Gson().toJson(body)
                     .toRequestBody("application/json".toMediaType())).build()).execute()
-        return RestResponse.from(res)
+        return E2EResponse.from(res)
     }
 
-    fun post(body : Map<String, String?>): RestResponse {
+    fun post(body : Map<String, String?>): E2EResponse {
         val client = OkHttpClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .post(Gson().toJson(body)
                     .toRequestBody("application/json".toMediaType())).build()).execute()
-        return RestResponse.from(res)
+        return E2EResponse.from(res)
     }
 
-    fun post(body: String): RestResponse {
+    fun post(body: String): E2EResponse {
         val client = OkHttpClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .post(body.toRequestBody())
                 .build()).execute()
-        return RestResponse.from(res)
+        return E2EResponse.from(res)
     }
 
-    fun delete(body: String = ""): RestResponse {
+    fun delete(body: String = ""): E2EResponse {
         val client = OkHttpClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .delete(body.toRequestBody())
                 .build()).execute()
-        return RestResponse.from(res)
+        return E2EResponse.from(res)
     }
 
     private fun mapToQuery(queryParams : Map<String, String>) = queryParams.keys.map { "${it.utf8()}=${queryParams[it]!!.utf8()}"} .joinToString("&")
