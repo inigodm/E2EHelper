@@ -19,6 +19,15 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
+    fun get(): E2EResponse {
+        val client = OkHttpClient()
+        val res = client.newCall(
+            createAPetition(url, innerHeaders)
+                .get()
+                .build()).execute()
+        return E2EResponse.from(res)
+    }
+
     fun put(body: String): E2EResponse {
         val client = OkHttpClient()
         val res = client.newCall(

@@ -32,6 +32,11 @@ class E2ERequest(private val client : HttpClientWrapper) {
     fun sendAPost(body: String): E2EResponse  = client.post(body)
 
     fun sendADelete(body: String = ""): E2EResponse  = client.delete(body)
+
+    fun withABearer(bearerProducer : () -> String): E2ERequest {
+        innerHeaders["Authorization"] = bearerProducer.invoke()
+        return this
+    }
     companion object {
         @JvmStatic
         fun to(url: String) = E2ERequest(url)

@@ -34,6 +34,11 @@ class E2EResponse private constructor(var returned: Response, var gson : Gson = 
         return this
     }
 
+    fun assertThatBodyContainsValueStartingWith(key : String, startsWith: String) : E2EResponse {
+        assertThat(extractBodyAsMap().get(key) as String).startsWith(startsWith)
+        return this
+    }
+
     fun body() : Map<String, Any?> {
         return gson.fromJson(returned.body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.type)
     }
