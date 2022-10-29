@@ -47,7 +47,9 @@ class HttpGetPetitionAssertionTest {
 
     @Test
     fun `should send a post petition with body and receive a 200`() {
-        E2ERequest.to("http://localhost/post").sendAPost(mapOf("innerbody" to "value"))
+        E2ERequest.to("http://localhost/post")
+            .withHeader("tete", "Bearer khirhiohfhdjdbdfhgfbjcbfhf cvbdierf")
+            .sendAPost(mapOf("innerbody" to "value"))
             .assertThatResponseIsOk()
             .assertThatBodyContainsExactlyInAnyOrder(mapOf("innerbody" to "value"))
     }

@@ -16,6 +16,7 @@ dependencies {
     implementation "org.junit.jupiter:junit-jupiter:${junit5version}"
     implementation group: "com.google.code.gson", name: "gson", version: "${gsonversion}"
     implementation group: "com.squareup.okhttp3", name: "okhttp", version: "${okhttp3}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
     implementation "org.assertj:assertj-core:${assertJVersion}"
     testImplementation "org.xerial:sqlite-jdbc:${sqlite}"
     runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5version}"

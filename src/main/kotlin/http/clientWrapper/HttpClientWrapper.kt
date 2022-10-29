@@ -6,12 +6,12 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.logging.HttpLoggingInterceptor
 
 class HttpClientWrapper(private val url: String) {
-    private val innerHeaders = mutableMapOf<String, String>()
 
-    fun get(queryParams : Map<String, String> = mapOf()): E2EResponse {
-        val client = OkHttpClient()
+    fun get(queryParams : Map<String, String> = mapOf(), innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
         val res = client.newCall(
             createAPetition("${url}?${mapToQuery(queryParams)}", innerHeaders)
                 .get()
@@ -19,8 +19,8 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun get(): E2EResponse {
-        val client = OkHttpClient()
+    fun get(innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .get()
@@ -28,8 +28,8 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun put(body: String): E2EResponse {
-        val client = OkHttpClient()
+    fun put(body: String, innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .put(body.toRequestBody())
@@ -37,8 +37,8 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun put(body : Map<String, Any?>) : E2EResponse{
-        val client = OkHttpClient()
+    fun put(body : Map<String, Any?>, innerHeaders: Map<String, String>) : E2EResponse{
+        val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .post(Gson().toJson(body)
@@ -46,8 +46,8 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun post(body : Map<String, String?>): E2EResponse {
-        val client = OkHttpClient()
+    fun post(body : Map<String, String?>, innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .post(Gson().toJson(body)
@@ -55,8 +55,8 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun post(body: String): E2EResponse {
-        val client = OkHttpClient()
+    fun post(body: String, innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .post(body.toRequestBody())
@@ -64,13 +64,21 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun delete(body: String = ""): E2EResponse {
-        val client = OkHttpClient()
+    fun delete(body: String = "", innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
                 .delete(body.toRequestBody())
                 .build()).execute()
         return E2EResponse.from(res)
+    }
+
+    fun buildClient() : OkHttpClient {
+        val client = OkHttpClient().newBuilder()
+        val logging = HttpLoggingInterceptor()
+        logging.level = (HttpLoggingInterceptor.Level.HEADERS)
+        client.addInterceptor(logging)
+        return client.build()
     }
 
     private fun mapToQuery(queryParams : Map<String, String>) = queryParams.keys.map { "${it.utf8()}=${queryParams[it]!!.utf8()}"} .joinToString("&")

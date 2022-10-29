@@ -23,15 +23,15 @@ class E2ERequest(private val client : HttpClientWrapper) {
     }
 
     fun sendAGet(queryParams : Map<String, String> = mapOf()): E2EResponse = client.get(queryParams)
-    fun sendAPut(body: String): E2EResponse = client.put(body)
+    fun sendAPut(body: String): E2EResponse = client.put(body, innerHeaders)
 
-    fun sendAPut(body : Map<String, Any?>) : E2EResponse = client.put(body)
+    fun sendAPut(body : Map<String, Any?>) : E2EResponse = client.put(body, innerHeaders)
 
-    fun sendAPost(body : Map<String, String?>): E2EResponse = client.post(body)
+    fun sendAPost(body : Map<String, String?>): E2EResponse = client.post(body, innerHeaders)
 
-    fun sendAPost(body: String): E2EResponse  = client.post(body)
+    fun sendAPost(body: String): E2EResponse  = client.post(body, innerHeaders)
 
-    fun sendADelete(body: String = ""): E2EResponse  = client.delete(body)
+    fun sendADelete(body: String = ""): E2EResponse  = client.delete(body, innerHeaders)
 
     fun withABearer(bearerProducer : () -> String): E2ERequest {
         innerHeaders["Authorization"] = bearerProducer.invoke()
