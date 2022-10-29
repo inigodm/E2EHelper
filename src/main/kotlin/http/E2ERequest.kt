@@ -22,7 +22,7 @@ class E2ERequest(private val client : HttpClientWrapper) {
         return this
     }
 
-    fun sendAGet(queryParams : Map<String, String> = mapOf()): E2EResponse = client.get(queryParams)
+    fun sendAGet(queryParams : Map<String, String> = mapOf()): E2EResponse = client.get(queryParams, innerHeaders)
     fun sendAPut(body: String): E2EResponse = client.put(body, innerHeaders)
 
     fun sendAPut(body : Map<String, Any?>) : E2EResponse = client.put(body, innerHeaders)
