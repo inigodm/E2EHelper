@@ -19,7 +19,7 @@ class HttpClientWrapper(private val url: String) {
         return E2EResponse.from(res)
     }
 
-    fun get(innerHeaders: Map<String, String>): E2EResponse {
+    fun get(innerHeaders: Map<String, String> = mapOf()): E2EResponse {
         val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
@@ -41,7 +41,7 @@ class HttpClientWrapper(private val url: String) {
         val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
-                .post(Gson().toJson(body)
+                .put(Gson().toJson(body)
                     .toRequestBody("application/json".toMediaType())).build()).execute()
         return E2EResponse.from(res)
     }
