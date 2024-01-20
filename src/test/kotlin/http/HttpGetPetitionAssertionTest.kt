@@ -46,6 +46,24 @@ class HttpGetPetitionAssertionTest {
     }
 
     @Test
+    fun `should parse bodies`() {
+        data class Clazz(val A: String, val B: Int)
+
+        E2ERequest.to("http://localhost/put").sendAPut("""
+            {
+                "value: {
+                    "A" : "a",
+                    "B" : 7
+                    }
+            }
+        """.trimIndent())
+            .assertThatResponseIsOk()
+            .bodyAsMapValueForKey<Clazz>("value")
+
+
+    }
+
+    @Test
     fun `should send a post petition with body and receive a 200`() {
         E2ERequest.to("http://localhost/post")
             .withHeader("tete", "Bearer khirhiohfhdjdbdfhgfbjcbfhf cvbdierf")

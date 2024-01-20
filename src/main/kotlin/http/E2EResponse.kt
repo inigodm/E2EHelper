@@ -43,6 +43,11 @@ class E2EResponse private constructor(var returned: Response, var gson : Gson = 
         return gson.fromJson(returned.body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.type)
     }
 
+    fun <T> bodyAsMapValueForKey(key: String) {
+        val bodyAsMap : Map<String, Any?> = gson.fromJson(returned.body?.string(), object : TypeToken<Map<String?, Any?>?>() {}.type)
+        return gson.fromJson(bodyAsMap[key].toString(), object : TypeToken<T>() {}.type)
+    }
+
     fun assertThatBodyContains(expectedResponse : String) : E2EResponse {
         val body = returned.body
         assertThat(body?.string()).contains(expectedResponse)
