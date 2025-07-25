@@ -1,6 +1,12 @@
 package http
 
 import http.clientWrapper.HttpClientWrapper
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import okhttp3.*
 
 class E2ERequest(private val client : HttpClientWrapper) {
     private constructor(url: String) : this(HttpClientWrapper(url))
@@ -29,6 +35,26 @@ class E2ERequest(private val client : HttpClientWrapper) {
 
     fun sendAPost(body : Map<String, String?>): E2EResponse = client.post(body, innerHeaders)
 
+    fun sendAFilePost(filePath: String, fileParamName: String, params: Map<String, Any>): E2EResponse {
+        val file = File(filePath)
+
+        require(file.exists() && file.canRead()) { "File is not reachable: $filePath" }
+
+
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .apply {
+                params.forEach { (key, value) ->
+                    addFormDataPart(key, value.toString())
+                }
+            }
+            .addFormDataPart(fileParamName, file.name, file.asRequestBody())
+            .build()
+
+        return  client.postAFile(
+            requestBody,
+            innerHeaders)
+    }
     fun sendAPost(body: String): E2EResponse  = client.post(body, innerHeaders)
 
     fun sendADelete(body: String = ""): E2EResponse  = client.delete(body, innerHeaders)
@@ -41,5 +67,11 @@ class E2ERequest(private val client : HttpClientWrapper) {
         @JvmStatic
         fun to(url: String) = E2ERequest(url)
 
+        @JvmStatic
+        private fun createAPetition(headers: Map<String, String>): Request.Builder {
+            val request = Request.Builder()
+            headers.forEach { request.header(it.key, it.value) }
+            return request
+        }
     }
 }

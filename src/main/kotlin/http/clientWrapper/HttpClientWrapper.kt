@@ -3,6 +3,7 @@ package http.clientWrapper
 import com.google.gson.Gson
 import http.E2EResponse
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -47,6 +48,15 @@ class HttpClientWrapper(private val url: String) {
     }
 
     fun post(body : Map<String, String?>, innerHeaders: Map<String, String>): E2EResponse {
+        val client = buildClient()
+        val res = client.newCall(
+            createAPetition(url, innerHeaders)
+                .post(Gson().toJson(body)
+                    .toRequestBody("application/json".toMediaType())).build()).execute()
+        return E2EResponse.from(res)
+    }
+
+    fun postAFile(body : MultipartBody, innerHeaders: Map<String, String>): E2EResponse {
         val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)

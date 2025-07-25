@@ -3,6 +3,7 @@ package http
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.opentest4j.AssertionFailedError
+import java.io.File
 
 class HttpGetPetitionAssertionTest {
     @Test
@@ -77,5 +78,19 @@ class HttpGetPetitionAssertionTest {
         E2ERequest.to("http://localhost/delete").sendADelete("innerbody")
             .assertThatResponseIsOk()
             .assertThatBodyContains("innerbody")
+    }
+
+    @Test
+    fun `should send a file post petition and receive a 200`() {
+        val file = File.createTempFile("testFile", ".txt").apply {
+            writeText("This is a test file")
+            deleteOnExit()
+        }
+
+        val res = E2ERequest.to("http://localhost/post")
+            .sendAFilePost(file.absolutePath, "fileParam", mapOf("key" to "value"))
+            .assertThatResponseIsOk()
+            .assertThatBodyContains("fileParam")
+        println("Response body: $res")
     }
 }
