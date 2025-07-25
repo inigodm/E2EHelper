@@ -60,8 +60,8 @@ class HttpClientWrapper(private val url: String) {
         val client = buildClient()
         val res = client.newCall(
             createAPetition(url, innerHeaders)
-                .post(Gson().toJson(body)
-                    .toRequestBody("application/json".toMediaType())).build()).execute()
+                .post(body).build())
+            .execute()
         return E2EResponse.from(res)
     }
 
